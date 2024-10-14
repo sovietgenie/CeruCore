@@ -9,13 +9,13 @@ namespace CeruCore
         public string Prefix { get; set; }
         public async Task ReadJSON()
         {
-            using (StreamReader sr = new StreamReader("config.json"))
+            using (StreamReader SR = new StreamReader("config.json"))
             {
-                string json = await sr.ReadToEndAsync();
-                JsonStructure data = JsonConvert.DeserializeObject<JsonStructure>(json);
+                string Json = await SR.ReadToEndAsync();
+                JsonStructure Data = JsonConvert.DeserializeObject<JsonStructure>(Json);
 
-                this.Token = data.Token;
-                this.Prefix = data.Prefix;
+                this.Token = Data.Token;
+                this.Prefix = Data.Prefix;
             }
         }
         internal sealed class JsonStructure
@@ -24,23 +24,23 @@ namespace CeruCore
             public required string Prefix { get; set; }
         }
 
-        public static string FindKeyByNestedProperty(string searchString, string jsonFilePath)
+        public static string FindKeyByNestedProperty(string SearchString, string JsonFilePath)
         {
             try
             {
                 // Read the JSON file
-                var jsonData = File.ReadAllText(jsonFilePath);
-                var jsonObject = JObject.Parse(jsonData);
+                var JsonData = File.ReadAllText(JsonFilePath);
+                var JsonObject = JObject.Parse(JsonData);
 
                 // Iterate through the key-value pairs in the JSON object
-                foreach (var item in jsonObject)
+                foreach (var Item in JsonObject)
                 {
                     // Check all localized names for a match
-                    foreach (var language in item.Value.Children<JProperty>())
+                    foreach (var Language in Item.Value.Children<JProperty>())
                     {
-                        if (language.Value.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                        if (Language.Value.ToString().Contains(SearchString, StringComparison.OrdinalIgnoreCase))
                         {
-                            return item.Key; // Return the key (ID) when a match is found
+                            return Item.Key; // Return the key (ID) when a match is found
                         }
                     }
                 }
@@ -52,17 +52,17 @@ namespace CeruCore
 
             return null; // Return null if no match is found
         }
-        public static string FindNameByID(string searchID, string jsonFilePath)
+        public static string FindNameByID(string SearchID, string JsonFilePath)
         {
-            var jsonData = File.ReadAllText(jsonFilePath);
-            var jsonObject = JObject.Parse(jsonData);
+            var JsonData = File.ReadAllText(JsonFilePath);
+            var JsonObject = JObject.Parse(JsonData);
             try
             {
-                foreach (var item in jsonObject)
+                foreach (var Item in JsonObject)
                 {
-                    if (searchID == item.Key)
+                    if (SearchID == Item.Key)
                     {
-                        return item.Value.ToString();
+                        return Item.Value.ToString();
                     }
                 }
             }
