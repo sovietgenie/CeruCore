@@ -15,19 +15,19 @@ namespace CeruCore
 
         static async Task Main(string[] args)
         {
-            var jsonReader = new jsonReader();
-            await jsonReader.ReadJSON();
+            var JsonReader = new JsonReader();
+            await JsonReader.ReadJSON();
 
 
-            var discordConfig = new DiscordConfiguration()
+            var DiscordConfig = new DiscordConfiguration()
             {
                 Intents = DiscordIntents.All,
-                Token = jsonReader.Token,
+                Token = JsonReader.Token,
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
             };
 
-            Client = new DiscordClient(discordConfig);
+            Client = new DiscordClient(DiscordConfig);
 
             Client.UseInteractivity(new InteractivityConfiguration()
             {
@@ -37,21 +37,21 @@ namespace CeruCore
             Client.Ready += Client_Ready;
 
 
-            var commandsConfig = new CommandsNextConfiguration()
+            var CommandsConfig = new CommandsNextConfiguration()
             {
-                StringPrefixes = new string[] { jsonReader.Prefix },
+                StringPrefixes = new string[] { JsonReader.Prefix },
                 EnableMentionPrefix = true,
                 EnableDms = true,
                 EnableDefaultHelp = false,
 
             };
 
-            Commands = Client.UseCommandsNext(commandsConfig);
+            Commands = Client.UseCommandsNext(CommandsConfig);
             
-            var slashCommandsConfiguration = Client.UseSlashCommands();
+            var SlashCommandsConfiguration = Client.UseSlashCommands();
 
             Commands.RegisterCommands<Commands>();
-            slashCommandsConfiguration.RegisterCommands<SlashCommands>();
+            SlashCommandsConfiguration.RegisterCommands<SlashCommands>();
 
             await Client.ConnectAsync();
             await Task.Delay(-1);

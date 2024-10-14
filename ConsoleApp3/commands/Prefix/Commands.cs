@@ -15,65 +15,65 @@ namespace CeruCore.commands.Prefix
         [Command("Help")]
         public async Task Help(CommandContext ctx)
         {
-            var message = new DiscordMessageBuilder()
+            var Message = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder()
                 .WithTitle($"Hello {ctx.User.Username}!")
                 .WithDescription($"Thank you for using Ceru!")
                 .WithColor(new DiscordColor(0x2F5889)));
 
-            await ctx.Channel.SendMessageAsync(message);
+            await ctx.Channel.SendMessageAsync(Message);
         }
 
         //A cardgame bot
         [Command("Cardgame")]
         public async Task Cardgame(CommandContext ctx)
         {
-            var userCard = new CardSystem();
+            var UserCard = new CardSystem();
 
-            var userCardEmbed = new DiscordMessageBuilder()
+            var UserCardEmbed = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder()
-                .WithTitle($"Your card is {userCard.SelectedCard}")
+                .WithTitle($"Your card is {UserCard.SelectedCard}")
                 .WithColor(new DiscordColor(0x2F5889)));
 
-            await ctx.Channel.SendMessageAsync(userCardEmbed);
+            await ctx.Channel.SendMessageAsync(UserCardEmbed);
 
-            var botCard = new CardSystem();
+            var BotCard = new CardSystem();
 
-            var botCardEmbed = new DiscordMessageBuilder()
+            var BotCardEmbed = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder()
-                .WithTitle($"Ceru's card is {botCard.SelectedCard}")
+                .WithTitle($"Ceru's card is {BotCard.SelectedCard}")
                 .WithColor(new DiscordColor(0xDBB457)));
-            await ctx.Channel.SendMessageAsync(botCardEmbed);
+            await ctx.Channel.SendMessageAsync(BotCardEmbed);
 
-            if (userCard.SelectedNumber > botCard.SelectedNumber)
+            if (UserCard.SelectedNumber > BotCard.SelectedNumber)
             {
                 //victory
-                var userVictoryEmbed = new DiscordMessageBuilder()
+                var UserVictoryEmbed = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder()
-                .WithTitle($"{ctx.User.Username} has won with a {userCard.SelectedCard}!")
+                .WithTitle($"{ctx.User.Username} has won with a {UserCard.SelectedCard}!")
                 .WithColor(new DiscordColor(0x658241)));
 
-                await ctx.Channel.SendMessageAsync(userVictoryEmbed);
+                await ctx.Channel.SendMessageAsync(UserVictoryEmbed);
             }
-            else if (userCard.SelectedNumber == botCard.SelectedNumber)
+            else if (UserCard.SelectedNumber == BotCard.SelectedNumber)
             {
                 //draw
-                var drawEmbed = new DiscordMessageBuilder()
+                var DrawEmbed = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder()
                 .WithTitle("The game ends in a draw!")
                 .WithColor(new DiscordColor(0x66304E)));
 
-                await ctx.Channel.SendMessageAsync(drawEmbed);
+                await ctx.Channel.SendMessageAsync(DrawEmbed);
             }
             else
             {
                 //loss
-                var botVictoryEmbed = new DiscordMessageBuilder()
+                var BotVictoryEmbed = new DiscordMessageBuilder()
                 .AddEmbed(new DiscordEmbedBuilder()
-                .WithTitle($"Ceru has won with a {botCard.SelectedCard}!")
+                .WithTitle($"Ceru has won with a {BotCard.SelectedCard}!")
                 .WithColor(new DiscordColor(0x781A1A)));
 
-                await ctx.Channel.SendMessageAsync(botVictoryEmbed);
+                await ctx.Channel.SendMessageAsync(BotVictoryEmbed);
             }
         }
 
@@ -81,263 +81,263 @@ namespace CeruCore.commands.Prefix
         [Command("Poll")]
         public async Task poll(CommandContext ctx, string option1, string option2, string option3, string option4, [RemainingText] string pollTitle)
         {
-            var interactivity = Program.Client.GetInteractivity();
+            var Interactivity = Program.Client.GetInteractivity();
 
-            var pollTime = TimeSpan.FromSeconds(30);
+            var PollTime = TimeSpan.FromSeconds(30);
 
-            DiscordEmoji[] emojiOptions = {
+            DiscordEmoji[] EmojiOptions = {
                 DiscordEmoji.FromName(Program.Client,":one:"),
                 DiscordEmoji.FromName(Program.Client,":two:"),
                 DiscordEmoji.FromName(Program.Client,":three:"),
                 DiscordEmoji.FromName(Program.Client,":four:")
                 };
-            string optionsDescription = $"{emojiOptions[0]} | {option1} \n" +
-                                        $"{emojiOptions[1]} | {option2} \n" +
-                                        $"{emojiOptions[2]} | {option3} \n" +
-                                        $"{emojiOptions[3]} | {option4} \n";
+            string OptionsDescription = $"{EmojiOptions[0]} | {option1} \n" +
+                                        $"{EmojiOptions[1]} | {option2} \n" +
+                                        $"{EmojiOptions[2]} | {option3} \n" +
+                                        $"{EmojiOptions[3]} | {option4} \n";
 
-            var pollMessage = new DiscordEmbedBuilder
+            var PollMessage = new DiscordEmbedBuilder
             {
                 Color = new DiscordColor(0x2F5889),
                 Title = pollTitle,
-                Description = optionsDescription
+                Description = OptionsDescription
             };
 
-            var sentPoll = await ctx.Channel.SendMessageAsync(embed: pollMessage);
+            var SentPoll = await ctx.Channel.SendMessageAsync(embed: PollMessage);
 
-            foreach (var emoji in emojiOptions)
+            foreach (var emoji in EmojiOptions)
             {
                 Thread.Sleep(1000);
-                await sentPoll.CreateReactionAsync(emoji);
+                await SentPoll.CreateReactionAsync(emoji);
             }
 
-            var totalReactions = await interactivity.CollectReactionsAsync(sentPoll, pollTime);
+            var TotalReactions = await Interactivity.CollectReactionsAsync(SentPoll, PollTime);
 
-            int count1 = 0;
-            int count2 = 0;
-            int count3 = 0;
-            int count4 = 0;
+            int Count1 = 0;
+            int Count2 = 0;
+            int Count3 = 0;
+            int Count4 = 0;
 
-            foreach (var emoji in totalReactions)
+            foreach (var Emoji in TotalReactions)
             {
-                if (emoji.Emoji == emojiOptions[0]) { count1++; }
-                else if (emoji.Emoji == emojiOptions[1]) { count2++; }
-                else if (emoji.Emoji == emojiOptions[2]) { count3++; }
-                else if (emoji.Emoji == emojiOptions[3]) { count4++; }
+                if (Emoji.Emoji == EmojiOptions[0]) { Count1++; }
+                else if (Emoji.Emoji == EmojiOptions[1]) { Count2++; }
+                else if (Emoji.Emoji == EmojiOptions[2]) { Count3++; }
+                else if (Emoji.Emoji == EmojiOptions[3]) { Count4++; }
             }
 
-            int totalVotes = count1 + count2 + count3 + count4;
+            int TotalVotes = Count1 + Count2 + Count3 + Count4;
 
-            string resultsDescription = $"{emojiOptions[0]} | {option1} : {count1} votes \n" +
-                                        $"{emojiOptions[1]} | {option2} : {count2} votes \n" +
-                                        $"{emojiOptions[2]} | {option3} : {count3} votes \n" +
-                                        $"{emojiOptions[3]} | {option4} : {count4} votes \n\n" +
-                                        $"Total Votes: {totalVotes}";
+            string ResultsDescription = $"{EmojiOptions[0]} | {option1} : {Count1} votes \n" +
+                                        $"{EmojiOptions[1]} | {option2} : {Count2} votes \n" +
+                                        $"{EmojiOptions[2]} | {option3} : {Count3} votes \n" +
+                                        $"{EmojiOptions[3]} | {option4} : {Count4} votes \n\n" +
+                                        $"Total Votes: {TotalVotes}";
 
-            var resultEmbed = new DiscordEmbedBuilder
+            var ResultEmbed = new DiscordEmbedBuilder
             {
                 Color = new DiscordColor(0x2F5889),
                 Title = pollTitle,
-                Description = resultsDescription
+                Description = ResultsDescription
             };
 
-            await ctx.Channel.SendMessageAsync(embed: resultEmbed);
+            await ctx.Channel.SendMessageAsync(embed: ResultEmbed);
         }
 
         [Command("PriceCheck")]
-        public async Task PriceCheck(CommandContext ctx, string item)
+        public async Task PriceCheck(CommandContext ctx, string Item)
         {
             Console.WriteLine("Inside of Price Check Function...");
-            var itemIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivItemIdMap.json";
-            var worldIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivWorldIdMap.json";
+            var ItemIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivItemIdMap.json";
+            var WorldIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivWorldIdMap.json";
 
-            var result = JsonSearcher.FindKeyByNestedProperty(item, itemIdMapJSON);
+            var Result = JsonReader.FindKeyByNestedProperty(Item, ItemIdMapJSON);
 
-            if (result != null)
+            if (Result != null)
             {
-                var successMessage = new DiscordEmbedBuilder
+                var SuccessMessage = new DiscordEmbedBuilder
                 {
                     Color = new DiscordColor(0x2F5889),
                     Title = "Requested Item for Price Check",
-                    Description = $"Requested item ({item}) was found in data file with ID: {result}"
+                    Description = $"Requested item ({Item}) was found in data file with ID: {Result}"
                 };
 
-                await ctx.Channel.SendMessageAsync(embed: successMessage);
+                await ctx.Channel.SendMessageAsync(embed: SuccessMessage);
 
                 var ApiClient = new HttpClient();
                 try
                 {
-                    HttpResponseMessage response = await ApiClient.GetAsync($"https://universalis.app/api/v2/aggregated/Aether/{result}");
+                    HttpResponseMessage Response = await ApiClient.GetAsync($"https://universalis.app/api/v2/aggregated/Aether/{Result}");
 
-                    if (response.IsSuccessStatusCode)
+                    if (Response.IsSuccessStatusCode)
                     {
-                        string jsonResponse = await response.Content.ReadAsStringAsync();
-                        ApiResponse parsedJSON = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                        string JsonResponse = await Response.Content.ReadAsStringAsync();
+                        ApiResponse ParsedJSON = JsonConvert.DeserializeObject<ApiResponse>(JsonResponse);
 
-                        foreach (var itemResult in parsedJSON.Results)
+                        foreach (var ItemResult in ParsedJSON.Results)
                         {
                             //Price Check Header Message Setup
-                            var embedPCHeaderMessage = $"Item: {item} \n" +
-                                               $"Item ID: {result}";
+                            var EmbedPCHeaderMessage = $"Item: {Item} \n" +
+                                               $"Item ID: {Result}";
 
                             //NQ Message Setup
-                            var embedNQInfoMessage = "";
+                            var EmbedNQInfoMessage = "";
 
-                            if (itemResult.NQ.MinListing.DC != null)
+                            if (ItemResult.NQ.MinListing.DC != null)
                             {
-                                var foundWorld = JsonSearcher.FindNameByID(itemResult.NQ.MinListing.DC.WorldId.ToString(), worldIdMapJSON);
-                                embedNQInfoMessage = embedNQInfoMessage +
+                                var FoundWorld = JsonReader.FindNameByID(ItemResult.NQ.MinListing.DC.WorldId.ToString(), WorldIdMapJSON);
+                                EmbedNQInfoMessage = EmbedNQInfoMessage +
                                                $"Min Listing: \n" +
                                                $"--- In DC --- \n" +
-                                               $"Price: {itemResult.NQ.MinListing.DC.Price} gil \n" +
-                                               $"World ID: {foundWorld} \n";
+                                               $"Price: {ItemResult.NQ.MinListing.DC.Price} gil \n" +
+                                               $"World ID: {FoundWorld} \n";
                             }
-                            if (itemResult.NQ.MinListing.Region != null)
+                            if (ItemResult.NQ.MinListing.Region != null)
                             {
-                                var foundWorld = JsonSearcher.FindNameByID(itemResult.NQ.MinListing.Region.WorldId.ToString(), worldIdMapJSON);
-                                embedNQInfoMessage = embedNQInfoMessage +
+                                var FoundWorld = JsonReader.FindNameByID(ItemResult.NQ.MinListing.Region.WorldId.ToString(), WorldIdMapJSON);
+                                EmbedNQInfoMessage = EmbedNQInfoMessage +
                                                $"--- In Region --- \n" +
-                                               $"Price: {itemResult.NQ.MinListing.Region.Price} gil\n" +
-                                               $"World ID: {foundWorld} \n\n";
+                                               $"Price: {ItemResult.NQ.MinListing.Region.Price} gil\n" +
+                                               $"World ID: {FoundWorld} \n\n";
                             }
-                            if (itemResult.NQ.RecentPurchase.DC != null)
+                            if (ItemResult.NQ.RecentPurchase.DC != null)
                             {
-                                var foundWorld = JsonSearcher.FindNameByID(itemResult.NQ.RecentPurchase.DC.WorldId.ToString(), worldIdMapJSON);
-                                embedNQInfoMessage = embedNQInfoMessage +
+                                var FoundWorld = JsonReader.FindNameByID(ItemResult.NQ.RecentPurchase.DC.WorldId.ToString(), WorldIdMapJSON);
+                                EmbedNQInfoMessage = EmbedNQInfoMessage +
                                                $"Recent Purchase: \n" +
                                                $"--- In DC --- \n" +
-                                               $"Price: {itemResult.NQ.RecentPurchase.DC.Price} gil \n" +
-                                               $"Timestamp: {itemResult.NQ.RecentPurchase.DC.Timestamp.ToDateTime()} \n" +
-                                               $" World ID: {foundWorld} \n";
+                                               $"Price: {ItemResult.NQ.RecentPurchase.DC.Price} gil \n" +
+                                               $"Timestamp: {ItemResult.NQ.RecentPurchase.DC.Timestamp.ToDateTime()} \n" +
+                                               $" World ID: {FoundWorld} \n";
                             }
-                            if (itemResult.NQ.RecentPurchase.Region != null)
+                            if (ItemResult.NQ.RecentPurchase.Region != null)
                             {
-                                var foundWorld = JsonSearcher.FindNameByID(itemResult.NQ.RecentPurchase.Region.WorldId.ToString(), worldIdMapJSON);
-                                embedNQInfoMessage = embedNQInfoMessage +
+                                var FoundWorld = JsonReader.FindNameByID(ItemResult.NQ.RecentPurchase.Region.WorldId.ToString(), WorldIdMapJSON);
+                                EmbedNQInfoMessage = EmbedNQInfoMessage +
                                                $"--- In Region --- \n" +
-                                               $"Price: {itemResult.NQ.RecentPurchase.Region.Price} gil \n" +
-                                               $"Timestamp: {itemResult.NQ.RecentPurchase.Region.Timestamp.ToDateTime()} \n" +
-                                               $"World ID: {foundWorld} \n\n";
+                                               $"Price: {ItemResult.NQ.RecentPurchase.Region.Price} gil \n" +
+                                               $"Timestamp: {ItemResult.NQ.RecentPurchase.Region.Timestamp.ToDateTime()} \n" +
+                                               $"World ID: {FoundWorld} \n\n";
                             }
-                            if (itemResult.NQ.AverageSalePrice.DC != null)
+                            if (ItemResult.NQ.AverageSalePrice.DC != null)
                             {
-                                embedNQInfoMessage = embedNQInfoMessage +
+                                EmbedNQInfoMessage = EmbedNQInfoMessage +
                                                $"Average Sale Price (Last 4 days): \n" +
                                                $"--- In DC --- \n" +
-                                               $"Price: {Convert.ToInt64(itemResult.NQ.AverageSalePrice.DC.Price)} gil \n";
+                                               $"Price: {Convert.ToInt64(ItemResult.NQ.AverageSalePrice.DC.Price)} gil \n";
                             }
-                            if (itemResult.NQ.AverageSalePrice.Region != null)
+                            if (ItemResult.NQ.AverageSalePrice.Region != null)
                             {
-                                embedNQInfoMessage = embedNQInfoMessage +
+                                EmbedNQInfoMessage = EmbedNQInfoMessage +
                                                $"--- In Region --- \n" +
-                                               $"Price: {Convert.ToInt64(itemResult.NQ.AverageSalePrice.Region.Price)} gil \n\n";
+                                               $"Price: {Convert.ToInt64(ItemResult.NQ.AverageSalePrice.Region.Price)} gil \n\n";
                             }
-                            if (itemResult.NQ.DailySaleVelocity.DC != null)
+                            if (ItemResult.NQ.DailySaleVelocity.DC != null)
                             {
-                                embedNQInfoMessage = embedNQInfoMessage +
+                                EmbedNQInfoMessage = EmbedNQInfoMessage +
                                                $"Daily Sale Velocity (Last 4 days): \n" +
                                                $"--- In DC --- \n" +
-                                               $"Qty: {Convert.ToInt64(itemResult.NQ.DailySaleVelocity.DC.Quantity)} units \n";
+                                               $"Qty: {Convert.ToInt64(ItemResult.NQ.DailySaleVelocity.DC.Quantity)} units \n";
                             }
-                            if (itemResult.NQ.DailySaleVelocity.Region != null)
+                            if (ItemResult.NQ.DailySaleVelocity.Region != null)
                             {
-                                embedNQInfoMessage = embedNQInfoMessage +
+                                EmbedNQInfoMessage = EmbedNQInfoMessage +
                                                $"--- In Region --- \n" +
-                                               $"Qty: {Convert.ToInt64(itemResult.NQ.DailySaleVelocity.Region.Quantity)} units";
+                                               $"Qty: {Convert.ToInt64(ItemResult.NQ.DailySaleVelocity.Region.Quantity)} units";
                             }
 
                             //HQ Message Setup
-                            var embedHQInfoMessage = "";
+                            var EmbedHQInfoMessage = "";
 
-                            if (itemResult.HQ.MinListing.DC != null)
+                            if (ItemResult.HQ.MinListing.DC != null)
                             {
-                                var foundWorld = JsonSearcher.FindNameByID(itemResult.HQ.MinListing.DC.WorldId.ToString(), worldIdMapJSON);
-                                embedHQInfoMessage = embedHQInfoMessage +
+                                var FoundWorld = JsonReader.FindNameByID(ItemResult.HQ.MinListing.DC.WorldId.ToString(), WorldIdMapJSON);
+                                EmbedHQInfoMessage = EmbedHQInfoMessage +
                                                $"Min Listing: \n" +
                                                $"--- In DC --- \n" +
-                                               $"Price: {itemResult.HQ.MinListing.DC.Price} gil \n" +
-                                               $"World ID: {foundWorld} \n";
+                                               $"Price: {ItemResult.HQ.MinListing.DC.Price} gil \n" +
+                                               $"World ID: {FoundWorld} \n";
                             }
-                            if (itemResult.HQ.MinListing.Region != null)
+                            if (ItemResult.HQ.MinListing.Region != null)
                             {
-                                var foundWorld = JsonSearcher.FindNameByID(itemResult.HQ.MinListing.Region.WorldId.ToString(), worldIdMapJSON);
-                                embedHQInfoMessage = embedHQInfoMessage +
+                                var FoundWorld = JsonReader.FindNameByID(ItemResult.HQ.MinListing.Region.WorldId.ToString(), WorldIdMapJSON);
+                                EmbedHQInfoMessage = EmbedHQInfoMessage +
                                                $"--- In Region --- \n" +
-                                               $"Price: {itemResult.HQ.MinListing.Region.Price} gil \n" +
-                                               $"World ID: {foundWorld} \n\n";
+                                               $"Price: {ItemResult.HQ.MinListing.Region.Price} gil \n" +
+                                               $"World ID: {FoundWorld} \n\n";
                             }
-                            if (itemResult.HQ.RecentPurchase.DC != null)
+                            if (ItemResult.HQ.RecentPurchase.DC != null)
                             {
-                                var foundWorld = JsonSearcher.FindNameByID(itemResult.HQ.RecentPurchase.DC.WorldId.ToString(), worldIdMapJSON);
-                                embedHQInfoMessage = embedHQInfoMessage +
+                                var FoundWorld = JsonReader.FindNameByID(ItemResult.HQ.RecentPurchase.DC.WorldId.ToString(), WorldIdMapJSON);
+                                EmbedHQInfoMessage = EmbedHQInfoMessage +
                                                $"Recent Purchase: \n" +
                                                $"--- In DC --- \n" +
-                                               $"Price: {itemResult.HQ.RecentPurchase.DC.Price} gil \n" +
-                                               $"Timestamp: {itemResult.HQ.RecentPurchase.DC.Timestamp.ToDateTime()} \n" +
-                                               $"World ID: {foundWorld} \n";
+                                               $"Price: {ItemResult.HQ.RecentPurchase.DC.Price} gil \n" +
+                                               $"Timestamp: {ItemResult.HQ.RecentPurchase.DC.Timestamp.ToDateTime()} \n" +
+                                               $"World ID: {FoundWorld} \n";
                             }
-                            if (itemResult.HQ.RecentPurchase.Region != null)
+                            if (ItemResult.HQ.RecentPurchase.Region != null)
                             {
-                                var foundWorld = JsonSearcher.FindNameByID(itemResult.HQ.RecentPurchase.Region.WorldId.ToString(), worldIdMapJSON);
-                                embedHQInfoMessage = embedHQInfoMessage +
+                                var FoundWorld = JsonReader.FindNameByID(ItemResult.HQ.RecentPurchase.Region.WorldId.ToString(), WorldIdMapJSON);
+                                EmbedHQInfoMessage = EmbedHQInfoMessage +
                                                $"--- In Region --- \n" +
-                                               $"Price: {itemResult.HQ.RecentPurchase.Region.Price} gil \n" +
-                                               $"Timestamp: {itemResult.HQ.RecentPurchase.Region.Timestamp.ToDateTime()} \n" +
-                                               $"World ID: {foundWorld} \n\n";
+                                               $"Price: {ItemResult.HQ.RecentPurchase.Region.Price} gil \n" +
+                                               $"Timestamp: {ItemResult.HQ.RecentPurchase.Region.Timestamp.ToDateTime()} \n" +
+                                               $"World ID: {FoundWorld} \n\n";
                             }
-                            if (itemResult.HQ.AverageSalePrice.DC != null)
+                            if (ItemResult.HQ.AverageSalePrice.DC != null)
                             {
-                                embedHQInfoMessage = embedHQInfoMessage +
+                                EmbedHQInfoMessage = EmbedHQInfoMessage +
                                                $"Average Sale Price (Last 4 days): \n" +
                                                $"--- In DC --- \n" +
-                                               $"Price: {Convert.ToInt64(itemResult.HQ.AverageSalePrice.DC.Price)} gil \n";
+                                               $"Price: {Convert.ToInt64(ItemResult.HQ.AverageSalePrice.DC.Price)} gil \n";
                             }
-                            if (itemResult.HQ.AverageSalePrice.Region != null)
+                            if (ItemResult.HQ.AverageSalePrice.Region != null)
                             {
-                                embedHQInfoMessage = embedHQInfoMessage +
+                                EmbedHQInfoMessage = EmbedHQInfoMessage +
                                                $"--- In Region --- \n" +
-                                               $"Price: {Convert.ToInt64(itemResult.HQ.AverageSalePrice.Region.Price)} gil \n\n";
+                                               $"Price: {Convert.ToInt64(ItemResult.HQ.AverageSalePrice.Region.Price)} gil \n\n";
                             }
-                            if (itemResult.HQ.DailySaleVelocity.DC != null)
+                            if (ItemResult.HQ.DailySaleVelocity.DC != null)
                             {
-                                embedHQInfoMessage = embedHQInfoMessage +
+                                EmbedHQInfoMessage = EmbedHQInfoMessage +
                                                $"Daily Sale Velocity (Last 4 days): \n" +
                                                $"--- In DC --- \n" +
-                                               $"Qty: {Convert.ToInt64(itemResult.HQ.DailySaleVelocity.DC.Quantity)} units \n";
+                                               $"Qty: {Convert.ToInt64(ItemResult.HQ.DailySaleVelocity.DC.Quantity)} units \n";
                             }
-                            if (itemResult.HQ.DailySaleVelocity.Region != null)
+                            if (ItemResult.HQ.DailySaleVelocity.Region != null)
                             {
-                                embedHQInfoMessage = embedHQInfoMessage +
+                                EmbedHQInfoMessage = EmbedHQInfoMessage +
                                                $"--- In Region --- \n" +
-                                               $"Qty: {Convert.ToInt64(itemResult.HQ.DailySaleVelocity.Region.Quantity)} units";
+                                               $"Qty: {Convert.ToInt64(ItemResult.HQ.DailySaleVelocity.Region.Quantity)} units";
                             }
 
-                            var priceCheckHeaderEmbedMessageFinal = new DiscordEmbedBuilder
+                            var PriceCheckHeaderEmbedMessageFinal = new DiscordEmbedBuilder
                             {
                                 Color = new DiscordColor(0x2F5889),
-                                Title = $"Price Check: {item}",
-                                Description = embedPCHeaderMessage
+                                Title = $"Price Check: {Item}",
+                                Description = EmbedPCHeaderMessage
                             };
 
-                            await ctx.Channel.SendMessageAsync(embed: priceCheckHeaderEmbedMessageFinal);
+                            await ctx.Channel.SendMessageAsync(embed: PriceCheckHeaderEmbedMessageFinal);
 
-                            var priceCheckNQEmbedMessageFinal = new DiscordEmbedBuilder
+                            var PriceCheckNQEmbedMessageFinal = new DiscordEmbedBuilder
                             {
                                 Color = new DiscordColor(0x2F5889),
-                                Title = $"{item} - NQ Information",
-                                Description = embedNQInfoMessage
+                                Title = $"{Item} - NQ Information",
+                                Description = EmbedNQInfoMessage
                             };
 
-                            await ctx.Channel.SendMessageAsync(embed: priceCheckNQEmbedMessageFinal);
+                            await ctx.Channel.SendMessageAsync(embed: PriceCheckNQEmbedMessageFinal);
 
-                            var priceCheckHQEmbedMessageFinal = new DiscordEmbedBuilder
+                            var PriceCheckHQEmbedMessageFinal = new DiscordEmbedBuilder
                             {
                                 Color = new DiscordColor(0x2F5889),
-                                Title = $"{item} - HQ Information",
-                                Description = embedHQInfoMessage
+                                Title = $"{Item} - HQ Information",
+                                Description = EmbedHQInfoMessage
                             };
 
-                            await ctx.Channel.SendMessageAsync(embed: priceCheckHQEmbedMessageFinal);
+                            await ctx.Channel.SendMessageAsync(embed: PriceCheckHQEmbedMessageFinal);
                         }
 
 
@@ -356,14 +356,14 @@ namespace CeruCore.commands.Prefix
             }
             else
             {
-                var failedMessage = new DiscordEmbedBuilder
+                var FailedMessage = new DiscordEmbedBuilder
                 {
                     Color = new DiscordColor(0x2F5889),
                     Title = "Requested Item for Price Check",
-                    Description = $"Requested item ({item}) was NOT found in data file"
+                    Description = $"Requested item ({Item}) was NOT found in data file"
                 };
 
-                await ctx.Channel.SendMessageAsync(embed: failedMessage);
+                await ctx.Channel.SendMessageAsync(embed: FailedMessage);
             }
 
         }
