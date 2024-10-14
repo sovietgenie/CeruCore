@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CeruCore", "ConsoleApp3\CeruCore.csproj", "{8AD2FBBB-1F24-49C5-8B4A-14EA09E3ACED}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8AD2FBBB-1F24-49C5-8B4A-14EA09E3ACED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AD2FBBB-1F24-49C5-8B4A-14EA09E3ACED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AD2FBBB-1F24-49C5-8B4A-14EA09E3ACED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AD2FBBB-1F24-49C5-8B4A-14EA09E3ACED}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D473351D-2FA5-44BF-85C7-9DF9D67681DA}
+	EndGlobalSection
+EndGlobal
