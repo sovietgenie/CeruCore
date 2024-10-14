@@ -2,8 +2,8 @@
 {
     internal class CardSystem
     {
-        private int[] cardNumbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
-        private string[] suits = { "Clubs", "Spades", "Diamonds", "Hearts" };
+        private int[] CardNumbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+        private string[] Suits = { "Clubs", "Spades", "Diamonds", "Hearts" };
 
         public int SelectedNumber { get; set; }
         public string SelectedNumberAsString { get; set; }
@@ -11,11 +11,11 @@
 
         public CardSystem()
         {
-            var random = new Random();
-            int numberIndex = random.Next(0, cardNumbers.Length - 1);
-            int suitIndex = random.Next(0, suits.Length - 1);
+            var Random = new Random();
+            int NumberIndex = Random.Next(0, CardNumbers.Length - 1);
+            int SuitIndex = Random.Next(0, Suits.Length - 1);
 
-            this.SelectedNumber = cardNumbers[numberIndex];
+            this.SelectedNumber = CardNumbers[NumberIndex];
             switch (SelectedNumber)
             {
                 case 1:
@@ -60,7 +60,7 @@
                 default:
                     break;
             }
-            this.SelectedCard = $"{SelectedNumberAsString} of {suits[suitIndex]}";
+            this.SelectedCard = $"{SelectedNumberAsString} of {Suits[SuitIndex]}";
         }
     }
 }
