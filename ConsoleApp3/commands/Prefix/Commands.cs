@@ -4,6 +4,7 @@ using DSharpPlus.CommandsNext.Attributes;
 using DSharpPlus.Entities;
 using DSharpPlus.Interactivity.Extensions;
 using Epoch.net;
+using Lumina.Excel.Sheets;
 using Newtonsoft.Json;
 using static CeruCore.miscRef.PriceCheck.PriceCheckJson;
 
@@ -147,13 +148,26 @@ namespace CeruCore.commands.Prefix
         [Command("PriceCheck")]
         public async Task PriceCheck(CommandContext ctx, string Item)
         {
-            Console.WriteLine("Inside of Price Check Function...");
-            var ItemIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivItemIdMap.json";
+            //var ItemIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivItemIdMap.json";
             var WorldIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivWorldIdMap.json";
 
-            var Result = JsonReader.FindKeyByNestedProperty(Item, ItemIdMapJSON);
+            //var Result = JsonReader.FindKeyByNestedProperty(Item, ItemIdMapJSON);
+            var lumina = new Lumina.GameData("C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game\\sqpack");
 
-            if (Result != null)
+            var ItemSheet = lumina.GetExcelSheet<Item>();
+
+            var Result = 0;
+            
+            foreach (var Row in ItemSheet)
+            {
+                if (Row.Name.ToString() == Item)
+                {
+                    Result = (int)Row.RowId;
+                }
+
+            }
+
+            if (Result != null && Result != 0)
             {
                 var SuccessMessage = new DiscordEmbedBuilder
                 {
@@ -366,6 +380,25 @@ namespace CeruCore.commands.Prefix
                 await ctx.Channel.SendMessageAsync(embed: FailedMessage);
             }
 
+        }
+
+        //Lumina Command
+        [Command("Lumina")]
+        public async Task Lumina(CommandContext ctx)
+        {
+            var lumina = new Lumina.GameData("C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game\\sqpack");
+
+            var ItemSheet = lumina.GetExcelSheet<Item>();
+
+            Console.WriteLine(ItemSheet.GetRow(44001).Icon.ToString());
+            //foreach (var Row in ItemSheet)
+            //{   
+            //        if (Row.Name != "")
+            //    {
+            //        Console.WriteLine($"{Row.RowId}" + ": " + $"{Row.Name}");
+            //    }
+
+            //}
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Epoch.net;
+using Lumina.Excel.Sheets;
+using Lumina.Extensions;
 using Newtonsoft.Json;
 using static CeruCore.miscRef.PriceCheck.PriceCheckJson;
 
@@ -10,23 +12,36 @@ namespace CeruCore.commands.Slash
     {
         [SlashCommand("PriceCheck", "Returns available NQ/HQ data from Universalis.app for the specified item")]
 
-        public async Task PriceCheckSlashCommand(InteractionContext ctx, [Option("Item","The name of the item you want to price check")] string item)
+        public async Task PriceCheckSlashCommand(InteractionContext ctx, [Option("Item", "The name of the item you want to price check")] string Item)
         {
             await ctx.DeferAsync();
             DiscordWebhookBuilder WebhookBuilder = new DiscordWebhookBuilder();
-
-            var ItemIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivItemIdMap.json";
+            //var ItemIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivItemIdMap.json";
             var WorldIdMapJSON = "C:\\Users\\eugen\\source\\repos\\ConsoleApp3\\ConsoleApp3\\miscRef\\PriceCheck\\gamefile\\ffxivWorldIdMap.json";
 
-            var Result = JsonReader.FindKeyByNestedProperty(item, ItemIdMapJSON);
+            //var Result = JsonReader.FindKeyByNestedProperty(Item, ItemIdMapJSON);
+            var lumina = new Lumina.GameData("C:\\Program Files (x86)\\SquareEnix\\FINAL FANTASY XIV - A Realm Reborn\\game\\sqpack");
 
-            if (Result != null)
+            var ItemSheet = lumina.GetExcelSheet<Item>();
+
+            var Result = 0;
+
+            foreach (var Row in ItemSheet)
+            {
+                if (Row.Name == Item)
+                {
+                    Result = (int)Row.RowId;
+                }
+
+            }
+
+            if (Result != null && Result != 0)
             {
                 var SuccessMessage = new DiscordEmbedBuilder
                 {
                     Color = new DiscordColor(0x2F5889),
                     Title = "Requested Item for Price Check",
-                    Description = $"Requested item ({item}) was found in data file with ID: {Result}"
+                    Description = $"Requested item ({Item}) was found in data file with ID: {Result}"
                 };
 
                 await ctx.EditResponseAsync(WebhookBuilder.AddEmbed(SuccessMessage));
@@ -44,7 +59,7 @@ namespace CeruCore.commands.Slash
                         foreach (var ItemResult in ParsedJSON.Results)
                         {
                             //Price Check Header Message Setup
-                            var EmbedPCHeaderMessage = $"Item: {item} \n" +
+                            var EmbedPCHeaderMessage = $"Item: {Item} \n" +
                                                $"Item ID: {Result}";
 
                             //NQ Message Setup
@@ -182,7 +197,7 @@ namespace CeruCore.commands.Slash
                             var PriceCheckHeaderEmbedMessageFinal = new DiscordEmbedBuilder
                             {
                                 Color = new DiscordColor(0x2F5889),
-                                Title = $"Price Check: {item}",
+                                Title = $"Price Check: {Item}",
                                 Description = EmbedPCHeaderMessage
                             };
 
@@ -191,7 +206,7 @@ namespace CeruCore.commands.Slash
                             var PriceCheckNQEmbedMessageFinal = new DiscordEmbedBuilder
                             {
                                 Color = new DiscordColor(0x2F5889),
-                                Title = $"{item} - NQ Information",
+                                Title = $"{Item} - NQ Information",
                                 Description = EmbedNQInfoMessage
                             };
 
@@ -200,7 +215,7 @@ namespace CeruCore.commands.Slash
                             var PriceCheckHQEmbedMessageFinal = new DiscordEmbedBuilder
                             {
                                 Color = new DiscordColor(0x2F5889),
-                                Title = $"{item} - HQ Information",
+                                Title = $"{Item} - HQ Information",
                                 Description = EmbedHQInfoMessage
                             };
 
@@ -227,7 +242,7 @@ namespace CeruCore.commands.Slash
                 {
                     Color = new DiscordColor(0x2F5889),
                     Title = "Requested Item for Price Check",
-                    Description = $"Requested item ({item}) was NOT found in data file"
+                    Description = $"Requested item ({Item}) was NOT found in data file"
                 };
 
                 await ctx.EditResponseAsync(WebhookBuilder.AddEmbed(FailedMessage));

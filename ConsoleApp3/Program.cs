@@ -47,7 +47,7 @@ namespace CeruCore
             };
 
             Commands = Client.UseCommandsNext(CommandsConfig);
-            
+
             var SlashCommandsConfiguration = Client.UseSlashCommands();
 
             Commands.RegisterCommands<Commands>();

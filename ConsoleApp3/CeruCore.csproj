@@ -13,8 +13,8 @@
     <PackageReference Include="DSharpPlus.Interactivity" Version="4.5.0" />
     <PackageReference Include="DSharpPlus.SlashCommands" Version="4.5.0" />
     <PackageReference Include="Epoch.net" Version="4.1.0" />
-    <PackageReference Include="Lumina" Version="4.2.1" />
-    <PackageReference Include="Lumina.Excel" Version="7.0.1" />
+    <PackageReference Include="Lumina" Version="5.1.0" />
+    <PackageReference Include="Lumina.Excel" Version="7.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
