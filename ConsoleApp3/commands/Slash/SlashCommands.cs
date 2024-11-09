@@ -1,8 +1,8 @@
-﻿using DSharpPlus.Entities;
+﻿using CeruCore.Objects;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using Epoch.net;
 using Lumina.Excel.Sheets;
-using Lumina.Extensions;
 using Newtonsoft.Json;
 using static CeruCore.miscRef.PriceCheck.PriceCheckJson;
 
@@ -247,6 +247,33 @@ namespace CeruCore.commands.Slash
 
                 await ctx.EditResponseAsync(WebhookBuilder.AddEmbed(FailedMessage));
             }
+        }
+
+        [SlashCommand("TestDBPush", "Testing scraping FFXIV game data and pushing it to a MongoDB cluster")]
+
+        public async Task TestDBPush(InteractionContext ctx)
+        {
+            await ctx.DeferAsync();
+            //var JsonReader = new JsonReader();
+            //await JsonReader.ReadJSON();
+            //Console.WriteLine(JsonReader.DbConnectionString);
+
+            //var mongoSettings = MongoClientSettings.FromConnectionString(JsonReader.DbConnectionString);
+            //mongoSettings.ServerApi = new ServerApi(ServerApiVersion.V1);
+            //var mongoClient = new MongoClient(mongoSettings);
+            //try
+            //{
+            //    var result = mongoClient.GetDatabase("Ceru").RunCommand<BsonDocument>(new BsonDocument("ping", 1));
+            //    Console.WriteLine("Pinged your deployment. You successfully connected to MongoDB!");
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine(ex);
+            //}
+
+            GameItemData.pushGameItemsToDB(GameItemData.GetGameItemsFromGameData());
+            Console.WriteLine("If this works, I'm gonna be seriously impressed with myself...");
+            await ctx.EditResponseAsync(new DiscordWebhookBuilder().AddEmbed(new DiscordEmbedBuilder { Title = "test" }));
         }
     }
 }

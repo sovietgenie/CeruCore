@@ -157,7 +157,7 @@ namespace CeruCore.commands.Prefix
             var ItemSheet = lumina.GetExcelSheet<Item>();
 
             var Result = 0;
-            
+
             foreach (var Row in ItemSheet)
             {
                 if (Row.Name.ToString() == Item)

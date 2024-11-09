@@ -7,6 +7,7 @@ namespace CeruCore
     {
         public string Token { get; set; }
         public string Prefix { get; set; }
+        public string DbConnectionString { get; set; }
         public async Task ReadJSON()
         {
             using (StreamReader SR = new StreamReader("config.json"))
@@ -16,12 +17,14 @@ namespace CeruCore
 
                 this.Token = Data.Token;
                 this.Prefix = Data.Prefix;
+                this.DbConnectionString = Data.DbConnectionString;
             }
         }
         internal sealed class JsonStructure
         {
             public required string Token { get; set; }
             public required string Prefix { get; set; }
+            public required string DbConnectionString { get; set; }
         }
 
         public static string FindKeyByNestedProperty(string SearchString, string JsonFilePath)
